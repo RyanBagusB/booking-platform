@@ -13,11 +13,6 @@ class CustomerController extends Controller
         return Inertia::render('Customer/Index');
     }
 
-    public function home()
-    {
-        return Inertia::render('Customer/Home');
-    }
-
     public function create()
     {
         //

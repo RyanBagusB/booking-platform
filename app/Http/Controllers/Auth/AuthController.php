@@ -53,7 +53,7 @@ class AuthController extends Controller
             } elseif ($user->role === 'owner') {
                 return redirect()->route('owner.index');
             } else {
-                return redirect()->route('customer.home');
+                return redirect()->route('customer.index');
             }            
         }
 
