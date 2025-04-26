@@ -16,11 +16,9 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-Route::middleware('auth')->group(function () {
-    Route::middleware('role:customer')->group(function () {
-        Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
-    });
+Route::get('/', [CustomerController::class, 'index'])->name('customer.index');
 
+Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     });
