@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 const navItems = ['Home', 'Browse', 'Favorite', 'History'];
 
@@ -19,8 +19,10 @@ const footerSections = [
 ];
 
 const Header = () => {
+  const { auth } = usePage().props;
+
   return (
-    <header className="sticky top-0 left-0 flex items-center justify-between bg-white px-24 py-4 border-b border-[#E5E5E5]">
+    <header className="sticky top-0 left-0 flex items-center justify-between bg-white px-24 py-4 border-b border-[#E5E5E5] z-99">
       <div className="text-2xl font-semibold">
         <h1 className="text-nowrap text-[#152C5B]">
           Villa<span className="text-[#FF4000]">Cation</span>.
@@ -47,18 +49,30 @@ const Header = () => {
         </nav>
 
         <div className="flex space-x-4 items-center">
-          <Link
-            href="#"
-            className="bg-[#FF4000] text-white font-bold border border-[#FF4000] w-28 py-2 rounded-[4px] text-center transition duration-200 hover:bg-white hover:text-[#FF4000]"
-          >
-            Register
-          </Link>
-          <Link
-            href="#"
-            className="bg-white text-[#FF4000] font-bold border border-[#FF4000] w-28 py-2 rounded-[4px] text-center transition duration-200 hover:bg-[#FF4000] hover:text-white"
-          >
-            Sign In
-          </Link>
+          {auth.user ? (
+            <Link
+              method="post"
+              href="/logout"
+              className="bg-[#FF4000] text-white font-bold border border-[#FF4000] w-28 py-2 rounded-[4px] text-center transition duration-200 hover:bg-white hover:text-[#FF4000] cursor-pointer"
+            >
+              Logout
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/register"
+                className="bg-[#FF4000] text-white font-bold border border-[#FF4000] w-28 py-2 rounded-[4px] text-center transition duration-200 hover:bg-white hover:text-[#FF4000] cursor-pointer"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                className="bg-white text-[#FF4000] font-bold border border-[#FF4000] w-28 py-2 rounded-[4px] text-center transition duration-200 hover:bg-[#FF4000] hover:text-white cursor-pointer"
+              >
+                Sign In
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
