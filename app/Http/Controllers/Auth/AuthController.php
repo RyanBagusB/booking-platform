@@ -9,27 +9,12 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    public function showLoginAdminOwner()
+    public function showLogin()
     {
-        return Inertia::render('Auth/LoginAdminOwner');
+        return Inertia::render('Auth/Login');
     }
 
-    public function showLoginCustomer()
-    {
-        return Inertia::render('Auth/LoginCustomer');
-    }
-
-    public function loginAdminOwner(Request $request)
-    {
-        return $this->handleLogin($request, ['admin', 'owner'], 'login.admin');
-    }
-
-    public function loginCustomer(Request $request)
-    {
-        return $this->handleLogin($request, ['customer'], 'login');
-    }
-
-    protected function handleLogin(Request $request, array $allowedRoles, string $redirectIfFail)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -38,14 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
-            if (!in_array($user->role, $allowedRoles)) {
-                Auth::logout();
-                return redirect()->route($redirectIfFail)->withErrors([
-                    'email' => 'Email atau password salah.'
-                ]);
-            }
-
+            
             $request->session()->regenerate();
 
             if ($user->role === 'admin') {
@@ -62,14 +40,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $role = Auth::user()->role ?? 'customer';
-
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return in_array($role, ['admin', 'owner'])
-            ? redirect()->route('login.admin')
-            : redirect()->route('login');
+        return redirect()->route('login');
     }
 }
